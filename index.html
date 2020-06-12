@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My portfolio</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <style>
+        body{
+            background: #3a3c3d;
+            color: #fff;
+        }
+        @media screen and (max-width: 500px){
+            .body{
+                text-align: center;
+            }
+            .resprigh{
+                text-align: center !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5 mb-5">
+        <div id="loading" class="text-center">Loading...</div>
+        <div id="maindiv" hidden>
+            <div class="row">
+                <div class="col-md-4 text-right resprigh">
+                    <img style="border-radius: 50%;" width="120px" id="profileImage" />
+                </div>
+                <div class="col-md-8">
+                    <h2 id="fullname"></h2>
+                    <p id="bio"></p>
+                    <h5 id="followInfo"></h5>
+                    <p class="font-weight-bold">
+                        CHECK ME ON <a id="githublink" target="_blank" rel="notfollow">GITHUB</a>
+                    </p>
+                    <a class="twitter-timeline" data-width="400" data-height="400" data-theme="dark" href="https://twitter.com/thisisdipen?ref_src=twsrc%5Etfw">Tweets by thisisdipen</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4"></div>
+                <div class="col-md-8">
+                    <h3>My Repositories</h3>
+                    <ul class="repos"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        fetch('https://api.github.com/users/edwin042')
+        .then(response => response.json())
+        .then((data) => {
+            let followersCount = data.followers
+            let followInfo = `I have been followed by ${followersCount} awesome people on github`
+
+            document.querySelector('#profileImage').src = data.avatar_url
+            document.querySelector('#fullname').textContent = data.name
+            document.querySelector('#bio').textContent = data.bio
+            document.querySelector('#followInfo').textContent = followInfo
+            document.querySelector('#githublink').href = data.html_url
+            
+            document.querySelector('#maindiv').hidden = false
+            document.querySelector('#loading').hidden = true
+        });
+
+        fetch('https://api.github.com/users/edwin042/repos')
+        .then(res => res.json())
+        .then((data) => {
+            data.forEach(getData);
+
+            function getData(item, index){
+                    document.querySelector('.repos').innerHTML += '<li>' + item.name + '</li>';     
+            }
+        });
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>
